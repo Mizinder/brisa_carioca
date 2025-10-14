@@ -1,6 +1,6 @@
 // =======================================
 // JAVASCRIPT: CÓDIGO COMPLETO BRISA CARIOCA
-// (Volume Ambiente e Funcionalidades Completas)
+// (Com Compartilhamento de Imagem e Volume Ambiente)
 // =======================================
 
 // --- Constantes e Variáveis ---
@@ -21,6 +21,9 @@ const btnRecarregar = document.getElementById('btn-recarregar');
 const btnCompartilhar = document.getElementById('btn-compartilhar');
 const btnFavoritar = document.getElementById('btn-favoritar');
 const iconeFavoritar = document.getElementById('icone-favoritar');
+
+// Elemento que será transformado em imagem
+const appContainer = document.querySelector('.app-container');
 
 // Player de Áudio (Referência ao elemento no HTML)
 const audioPlayer = document.getElementById('musica-fundo');
@@ -56,23 +59,6 @@ function mostrarData() {
     dataElement.textContent = `HOJE: ${dataFormatada.replace('-feira', '').toUpperCase()}`;
 }
 
-/**
- * Usa a API nativa do navegador para compartilhamento.
- */
-function compartilharFrase() {
-    const frase = fraseElement.textContent;
-    const textoCompartilhamento = `*Brisa Carioca do Dia:*\n"${frase}"\n\nTamo junto! #MotivaçãoCarioca`;
-    
-    if (navigator.share) {
-        navigator.share({
-            title: 'Brisa Carioca do Dia',
-            text: textoCompartilhamento,
-        }).catch((error) => console.log('Erro no compartilhamento', error));
-    } else {
-        alert(`Para compartilhar, copie a frase:\n\n${textoCompartilhamento}`);
-    }
-}
-
 
 // --- Lógica de Áudio (Volume Ambiente + Inicia no Primeiro Clique) ---
 
@@ -82,7 +68,7 @@ function compartilharFrase() {
 function iniciarMusicaNoClique() {
     if (!audioIniciado) {
         
-        // NOVO: DEFINE O VOLUME PARA 30% (AMBIENTE)
+        // DEFINE O VOLUME PARA 30% (AMBIENTE)
         audioPlayer.volume = 0.3; 
 
         audioPlayer.play().then(() => {
@@ -130,6 +116,71 @@ function carregarEstadoFavorito() {
         btnFavoritar.classList.remove('is-favorited');
         iconeFavoritar.classList.remove('fas');
         iconeFavoritar.classList.add('far');
+    }
+}
+
+
+// --- Lógica de Compartilhamento com Imagem (HTML2Canvas) ---
+
+/**
+ * Converte um Data URI (Base64) em Blob/File. Necessário para o navigator.share com arquivos.
+ */
+function dataURItoBlob(dataURI) {
+    var byteString = atob(dataURI.split(',')[1]);
+    var mimeString = dataURI.split(',')[0].match(/:(.*?);/)[1];
+    var ab = new ArrayBuffer(byteString.length);
+    var ia = new Uint8Array(ab);
+    for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], {type: mimeString});
+}
+
+/**
+ * Captura a tela e compartilha a imagem + texto.
+ */
+async function compartilharFrase() {
+    const frase = fraseElement.textContent;
+    const textoCompartilhamento = `*Brisa Carioca do Dia:*\n"${frase}"\n\nTamo junto! #MotivaçãoCarioca`;
+    
+    // 1. Tenta criar uma imagem do app-container (requer html2canvas no HTML!)
+    try {
+        const canvas = await html2canvas(appContainer, {
+            windowWidth: appContainer.scrollWidth,
+            windowHeight: appContainer.scrollHeight,
+            scale: 2, 
+            useCORS: true
+        });
+
+        // 2. Converte o Canvas em um arquivo (Blob/File)
+        const imgData = canvas.toDataURL('image/png', 1.0);
+        const blob = dataURItoBlob(imgData);
+        const filesArray = [new File([blob], "brisa-carioca.png", { type: "image/png" })];
+
+        // 3. Tenta o Compartilhamento Nativo com Arquivo
+        if (navigator.share && navigator.canShare({ files: filesArray, text: textoCompartilhamento })) {
+            
+            await navigator.share({
+                files: filesArray,
+                title: 'Brisa Carioca do Dia',
+                text: textoCompartilhamento,
+            });
+            console.log('Compartilhado com sucesso!');
+
+        } else if (navigator.share) {
+            // Fallback se não suportar arquivos, compartilha só o texto
+            await navigator.share({
+                title: 'Brisa Carioca do Dia',
+                text: textoCompartilhamento,
+            });
+        } else {
+            // Fallback final: mostra um alerta para o usuário copiar o texto
+            alert(`Para compartilhar, copie a frase:\n\n${textoCompartilhamento}`);
+        }
+
+    } catch (error) {
+        console.error("Erro ao gerar ou compartilhar a imagem:", error);
+        alert("Não foi possível gerar a imagem para compartilhamento. Tente copiar o texto.");
     }
 }
 
