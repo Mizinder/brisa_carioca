@@ -1,0 +1,204 @@
+/* style.css */
+
+/* VARIÁVEIS DE COR E IMAGEM */
+:root {
+    --bg-image: url('pordosol.jpg'); /* Nova imagem de pôr do sol */
+    --primary-color: #F8B400; /* Dourado/Amarelo */
+    --text-color: #FFFFFF;
+    --overlay-color: rgba(0, 0, 0, 0.5); /* Escurecimento de 50% */
+}
+
+/* --------------------------------- */
+/* RESET E ALINHAMENTO GERAL (TELA CHEIA) */
+/* --------------------------------- */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%; 
+    width: 100%;
+    
+    /* NOVO: FONTE INTER */
+    font-family: 'Inter', sans-serif;
+    
+    /* ALINHAMENTO: Garante que o container fique no centro da tela */
+    display: flex;
+    justify-content: center; 
+    align-items: center;     
+    background-color: #111; 
+}
+
+/* --------------------------------- */
+/* CONTAINER PRINCIPAL (TELA CHEIA) */
+/* --------------------------------- */
+.app-container {
+    width: 100vw;   /* Ocupa 100% da largura da viewport */
+    height: 100vh;  /* Ocupa 100% da altura da viewport */
+    
+    /* Imagem de Fundo */
+    background-image: var(--bg-image);
+    background-size: cover;      /* ESSENCIAL: Garante que a imagem cubra TUDO */
+    background-position: center; 
+    
+    position: relative;
+    overflow: hidden;
+    
+    box-shadow: none;       /* Remove a sombra para o modo tela cheia */
+    border-radius: 0;       /* Remove bordas arredondadas */
+    
+    /* ALINHAMENTO: Coloca Header, Content e Footer em coluna */
+    display: flex;
+    flex-direction: column; 
+    align-items: center; /* Centraliza o conteúdo (header, content, footer) */
+    justify-content: space-between; /* Empurra header e footer para as bordas */
+}
+
+/* --------------------------------- */
+/* OVERLAY (ESCURECIMENTO) */
+/* --------------------------------- */
+.app-container__overlay {
+    background-color: var(--overlay-color);
+    width: 100%;
+    height: 100%;
+    
+    /* Replicando o alinhamento para o conteúdo interno */
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: space-between; 
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* --------------------------------- */
+/* HEADER E LOGO */
+/* --------------------------------- */
+.header {
+    width: 100%;
+    text-align: center;
+}
+
+.header__logo {
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: var(--primary-color);
+    letter-spacing: 5px;
+    margin-top: 20px;
+}
+
+/* --------------------------------- */
+/* BLOCO DA FRASE */
+/* --------------------------------- */
+.content-block {
+    flex-grow: 1; /* Permite que o bloco ocupe o máximo de altura disponível */
+    width: 85%; 
+    margin: 50px auto; 
+
+    /* ALINHAMENTO: Garante que a frase fique centralizada verticalmente */
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    text-align: center;
+}
+
+.content-block__text {
+    font-size: clamp(1.5rem, 6vw, 2.5rem); /* Tamanho responsivo */
+    font-weight: 700;
+    color: var(--text-color);
+    line-height: 1.4;
+    max-width: 600px;
+    user-select: none;
+    
+    opacity: 1;
+    transition: opacity 0.4s ease-in-out;
+}
+
+.content-block__text--loading,
+.content-block__text--fade-out {
+    opacity: 0;
+}
+
+.content-block__text--fade-in {
+    animation: fadeIn 0.5s forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* --------------------------------- */
+/* FOOTER E AÇÕES */
+/* --------------------------------- */
+.footer {
+    width: 100%;
+    padding-bottom: 30px; 
+    
+    /* ALINHAMENTO: Alinha os elementos internos do rodapé em coluna */
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    text-align: center;
+}
+
+.footer__date {
+    font-size: 0.8rem;
+    color: var(--text-color);
+    opacity: 0.7;
+    margin-bottom: 5px;
+}
+
+.action-bar {
+    width: 100%;
+    max-width: 280px; 
+    margin-top: 15px;
+    
+    /* ALINHAMENTO: Distribui os botões uniformemente */
+    display: flex;
+    justify-content: space-around; 
+    align-items: center;
+}
+
+.action-bar__label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    letter-spacing: 2px;
+    margin-top: 15px;
+}
+
+/* Botões */
+.action-bar__button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color);
+    transition: transform 0.2s, color 0.2s;
+}
+
+.action-bar__button i {
+    font-size: 1.8rem;
+}
+
+.action-bar__button:hover {
+    transform: scale(1.1);
+}
+
+.action-bar__button:disabled {
+    opacity: 0.5;
+    cursor: default;
+    transform: none;
+}
+
+/* Recarregar (Spinning effect) */
+.fa-redo-alt.is-spinning {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Favoritar (Curtida) */
+.action-bar__button.is-favorited i {
+    color: var(--primary-color); /* Amarelo quando curtido */
+}

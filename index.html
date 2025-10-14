@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brisa Carioca - App Motivacional Diário</title>
+    
+    <link rel="icon" href="https://twemoji.maxcdn.com/v/13.1.0/72x72/2600.png" type="image/png"> 
+    <link rel="stylesheet" href="style.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+</head>
+<body>
+
+    <audio id="musica-fundo" loop preload="auto">
+        <source src="trilha-carioca.mp3" type="audio/mpeg">
+        Seu navegador não suporta a tag de áudio.
+    </audio>
+    
+    <main class="app-container">
+        <div class="app-container__overlay">
+            
+            <header class="header">
+                <h1 class="header__logo">BRISA CARIOCA</h1>
+            </header>
+
+            <section class="content-block">
+                <p id="frase-motivacional" class="content-block__text content-block__text--loading">
+                    Buscando a braba, segura a onda...
+                </p>
+            </section>
+
+            <footer class="footer">
+                <p id="data-hoje" class="footer__date"></p>
+
+                <nav class="action-bar">
+                    
+                    <button 
+                        class="action-bar__button action-bar__button--icon" 
+                        id="btn-favoritar" 
+                        title="Favoritar"
+                    >
+                        <i id="icone-favoritar" class="far fa-heart"></i> 
+                    </button>
+                    
+                    <button 
+                        class="action-bar__button action-bar__button--share" 
+                        id="btn-compartilhar"
+                        title="Compartilhar"
+                    >
+                        <i class="fas fa-share-alt"></i>
+                    </button>
+                    
+                    <button 
+                        class="action-bar__button action-bar__button--icon" 
+                        id="btn-recarregar"
+                        title="Recarregar Frase"
+                    >
+                        <i class="fas fa-redo-alt"></i>
+                    </button>
+                </nav>
+                <p class="action-bar__label">COMPARTILHAR A BRABA</p>
+            </footer>
+
+        </div>
+    </main>
+
+    <script src="app.js"></script> 
+</body>
+</html>
