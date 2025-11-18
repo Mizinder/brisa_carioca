@@ -171,11 +171,11 @@ function iniciarMusicaNoClique() {
     if (!audioIniciado) {
         
         // DEFINE O VOLUME PARA 30% (AMBIENTE)
-        audioPlayer.volume = 0.3; 
+        audioPlayer.volume = 0.2; 
 
         audioPlayer.play().then(() => {
             audioIniciado = true;
-            console.log("Música iniciada após interação. Volume: 30%");
+            console.log("Música iniciada após interação. Volume: 15%");
         }).catch(error => {
             console.warn("Autoplay bloqueado. A música só iniciará com a próxima interação.");
         });
@@ -363,6 +363,7 @@ function initApp() {
 
 // Inicia o app quando o DOM estiver pronto
 document.addEventListener('DOMContentLoaded', initApp);
+
 
 
 
